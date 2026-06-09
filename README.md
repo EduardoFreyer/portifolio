@@ -9,32 +9,26 @@ Um portfólio profissional moderno e performático desenvolvido com as tecnologi
 
 ---
 
-## 📸 Visual do Projeto
-
-![Preview do Portfólio](./public/images/portfolio_preview.png)
-
----
-
 ## ✨ Funcionalidades Principais
 
-*   **Tema Escuro e Claro Nativo**: Mudanças visuais fluidas com persistência das preferências do usuário no `localStorage`.
-*   **Internacionalização (i18n)**: Suporte completo e dinâmico aos idiomas **Português (PT)** e **Inglês (EN)** para todo o conteúdo do site.
-*   **Formulário de Contato Inteligente**: Integração com a API do **Resend** para envio de e-mails em formato HTML personalizado combinando com o tema escuro do site.
-*   **Efeitos de Animação Avançados**:
-    *   Janela de código com digitação simulada em tempo real no Hero.
-    *   Cards de tecnologia com efeito de brilho radial interativo que segue a posição do cursor.
-    *   Transições de rolagem suaves com observadores de interseção (`IntersectionObserver`) ativados dinamicamente.
-*   **Design Responsivo e Premium**: Totalmente otimizado para celulares, tablets e computadores, utilizando Tailwind CSS e fontes do Google (`Space Grotesk`, `DM Sans`, `JetBrains Mono`).
+* **Tema Escuro e Claro Nativo**: Mudanças visuais fluidas com persistência das preferências do usuário no `localStorage`.
+* **Internacionalização (i18n)**: Suporte completo e dinâmico aos idiomas **Português (PT)** e **Inglês (EN)** para todo o conteúdo do site.
+* **Formulário de Contato Inteligente**: Integração com a API do **Resend** para envio de e-mails em formato HTML personalizado combinando com o tema escuro do site.
+* **Efeitos de Animação Avançados**:
+  * Janela de código com digitação simulada em tempo real no Hero.
+  * Cards de tecnologia com efeito de brilho radial interativo que segue a posição do cursor.
+  * Transições de rolagem suaves com observadores de interseção (`IntersectionObserver`) ativados dinamicamente.
+* **Design Responsivo e Premium**: Totalmente otimizado para celulares, tablets e computadores, utilizando Tailwind CSS e fontes do Google (`Space Grotesk`, `DM Sans`, `JetBrains Mono`).
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-*   **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
-*   **Linguagem**: [TypeScript](https://www.typescriptlang.org/)
-*   **Estilização**: [Tailwind CSS v4](https://tailwindcss.com/)
-*   **Envio de E-mail**: [Resend SDK](https://resend.com/)
-*   **Ícones**: SVGs customizados estilo Lucide e Tech Glyphs integrados.
+* **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
+* **Linguagem**: [TypeScript](https://www.typescriptlang.org/)
+* **Estilização**: [Tailwind CSS v4](https://tailwindcss.com/)
+* **Envio de E-mail**: [Resend SDK](https://resend.com/)
+* **Ícones**: SVGs customizados estilo Lucide e Tech Glyphs integrados.
 
 ---
 
@@ -69,35 +63,48 @@ Um portfólio profissional moderno e performático desenvolvido com as tecnologi
 ## 🚀 Como Iniciar Localmente
 
 ### Pré-requisitos
+
 Certifique-se de ter o [Node.js](https://nodejs.org/) instalado em sua máquina (recomendado versão 18 ou superior) e um gerenciador de pacotes como o `npm`.
 
 ### 1. Clonar e Instalar Dependências
+
 Instale todos os pacotes necessários especificados no `package.json`:
+
 ```bash
 npm install
 ```
 
 ### 2. Configurar Variáveis de Ambiente
+
 Crie ou configure o arquivo `.env.local` na raiz do projeto contendo a sua chave da Resend para poder receber as mensagens do formulário de contato:
+
 ```env
 # Configuração do Resend
 RESEND_API_KEY=re_sua_chave_real_da_resend
 ```
+
 > **Nota**: Se você estiver em desenvolvimento e usando um plano gratuito da Resend, os e-mails de teste serão entregues por padrão na mesma conta utilizada para o cadastro utilizando o remetente automático `onboarding@resend.dev`.
 
 ### 3. Executar o Servidor de Desenvolvimento
+
 Inicie o servidor local:
+
 ```bash
 npm run dev
 ```
+
 Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
 
 ### 4. Compilar para Produção
+
 Para gerar uma build otimizada de produção e verificar se não há erros de tipagem TypeScript:
+
 ```bash
 npm run build
 ```
+
 Para rodar a build local gerada:
+
 ```bash
 npm run start
 ```
