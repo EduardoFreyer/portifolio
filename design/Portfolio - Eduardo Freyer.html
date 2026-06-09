@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Eduardo Freyer — Full-Stack Developer</title>
+<link rel="stylesheet" href="styles.css"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="i18n.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="icons.jsx"></script>
+<script type="text/babel" src="nav.jsx"></script>
+<script type="text/babel" src="hero.jsx"></script>
+<script type="text/babel" src="sections.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "heroLayout": "code",
+  "accent": [
+    "#0980FF",
+    "#00D4FF"
+  ],
+  "showGrid": true,
+  "motion": true
+}/*EDITMODE-END*/;
+
+const ACCENTS = {
+  "#0980FF,#00D4FF": { hover: "#2E98FF", dim: "#0660CC" },
+  "#3B82F6,#22D3EE": { hover: "#60A5FA", dim: "#2563EB" },
+  "#6366F1,#22D3EE": { hover: "#818CF8", dim: "#4F46E5" },
+  "#06B6D4,#22D3EE": { hover: "#22D3EE", dim: "#0891B2" }
+};
+
+function hexToRgb(hex) {
+  const h = hex.replace("#", "");
+  const b = parseInt(h, 16);
+  return `${(b >> 16) & 255}, ${(b >> 8) & 255}, ${b & 255}`;
+}
+
+const LAYOUT_MAP = { code: "A", bold: "B", devices: "C" };
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [theme, setTheme] = useState(() => localStorage.getItem("ef-theme") || "dark");
+  const [lang, setLang] = useState(() => localStorage.getItem("ef-lang") || "pt");
+  const [scrolled, setScrolled] = useState(false);
+  const content = window.I18N[lang];
+
+  // theme
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("ef-theme", theme);
+  }, [theme]);
+
+  // lang
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", lang);
+    localStorage.setItem("ef-lang", lang);
+  }, [lang]);
+
+  // accent
+  useEffect(() => {
+    const pair = Array.isArray(t.accent) ? t.accent : ["#0980FF", "#00D4FF"];
+    const key = pair.join(",");
+    const meta = ACCENTS[key] || { hover: pair[0], dim: pair[0] };
+    const r = document.documentElement.style;
+    r.setProperty("--primary", pair[0]);
+    r.setProperty("--accent", pair[1]);
+    r.setProperty("--primary-hover", meta.hover);
+    r.setProperty("--primary-dim", meta.dim);
+    r.setProperty("--primary-rgb", hexToRgb(pair[0]));
+    r.setProperty("--accent-rgb", hexToRgb(pair[1]));
+  }, [t.accent]);
+
+  // grid + motion flags
+  useEffect(() => { document.documentElement.setAttribute("data-grid", t.showGrid ? "on" : "off"); }, [t.showGrid]);
+  useEffect(() => { document.documentElement.setAttribute("data-motion", t.motion ? "on" : "off"); }, [t.motion]);
+
+  // nav scroll state
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // scroll reveal
+  const variant = LAYOUT_MAP[t.heroLayout] || "A";
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal:not(.in)");
+    if (!t.motion) { els.forEach((e) => e.classList.add("in")); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    els.forEach((e) => io.observe(e));
+    return () => io.disconnect();
+  }, [lang, variant, t.motion]);
+
+  return (
+    <React.Fragment>
+      <div className="bg-fx">
+        <div className="glow"></div>
+        <div className="grid"></div>
+        <div className="orb a"></div>
+        <div className="orb b"></div>
+      </div>
+
+      <Nav t={content} theme={theme} setTheme={setTheme} lang={lang} setLang={setLang} scrolled={scrolled}/>
+
+      <main>
+        <Hero variant={variant} t={content}/>
+        <TechStack t={content}/>
+        <Projects t={content}/>
+        <About t={content}/>
+        <Contact t={content}/>
+      </main>
+
+      <Footer t={content}/>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label={lang === "pt" ? "Layout do Hero" : "Hero layout"}/>
+        <TweakRadio label={lang === "pt" ? "Estilo" : "Style"} value={t.heroLayout}
+          options={["code", "bold", "devices"]}
+          onChange={(v) => setTweak("heroLayout", v)}/>
+        <TweakSection label={lang === "pt" ? "Cor de destaque" : "Accent color"}/>
+        <TweakColor label={lang === "pt" ? "Paleta" : "Palette"} value={t.accent}
+          options={[["#0980FF", "#00D4FF"], ["#3B82F6", "#22D3EE"], ["#6366F1", "#22D3EE"], ["#06B6D4", "#22D3EE"]]}
+          onChange={(v) => setTweak("accent", v)}/>
+        <TweakSection label={lang === "pt" ? "Ambiente" : "Environment"}/>
+        <TweakToggle label={lang === "pt" ? "Grade de fundo" : "Background grid"} value={t.showGrid}
+          onChange={(v) => setTweak("showGrid", v)}/>
+        <TweakToggle label={lang === "pt" ? "Animações" : "Animations"} value={t.motion}
+          onChange={(v) => setTweak("motion", v)}/>
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#050508"/>
+  <path d="M54 22 L38 52 H50 L46 78 L66 44 H54 L58 22 Z" fill="#0980FF"/>
+</svg>
+</template>
+</body>
+</html>

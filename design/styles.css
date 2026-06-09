@@ -1,14 +1,10 @@
-@import "tailwindcss";
+/* ============================================================
+   Eduardo Freyer — Portfolio
+   Built on the Treina AI design system (electric blue)
+   Dark = default · Light theme via [data-theme="light"]
+   ============================================================ */
 
-@theme {
-  --font-display: var(--font-display);
-  --font-body: var(--font-body);
-  --font-mono: var(--font-mono);
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-dim: var(--primary-dim);
-  --color-accent: var(--accent);
-}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
   /* Fonts */
@@ -320,7 +316,7 @@ section { position: relative; }
 .code-bar .d { width: 11px; height: 11px; border-radius: 50%; }
 .code-bar .d.r { background: #FF5F57; } .code-bar .d.y { background: #FEBC2E; } .code-bar .d.g { background: #28C840; }
 .code-bar .file { margin-left: 10px; font-family: var(--font-mono); font-size: 12px; color: #6B7691; }
-.code-body { padding: 20px 22px; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.85; color: #C8D1E8; min-height: 320px; text-align: left; }
+.code-body { padding: 20px 22px; font-family: var(--font-mono); font-size: 13.5px; line-height: 1.85; color: #C8D1E8; min-height: 320px; }
 .code-body .ln { display: block; white-space: pre; }
 .tok-key { color: #2E98FF; } .tok-fn { color: #00D4FF; } .tok-str { color: #00D68F; }
 .tok-com { color: #5A6480; } .tok-var { color: #C8D1E8; } .tok-num { color: #FFB800; }
