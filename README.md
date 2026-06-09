@@ -36,7 +36,6 @@ Um portfólio profissional moderno e performático desenvolvido com as tecnologi
 
 ```text
 ├── public/                  # Arquivos estáticos (imagens, favicon)
-│   └── images/              # Prints e mockups para o README
 ├── src/
 │   ├── app/
 │   │   ├── api/             # Rota do servidor Next.js para processar o contato
