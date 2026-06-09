@@ -9,7 +9,6 @@ interface HeroProps {
   t: Translation;
 }
 
-/* ---- Code window (used in Variant A) ---- */
 function CodeWindow({ t }: { t: Translation }) {
   const lines = [
     [["tok-key", "const"], ["tok-var", " eduardo"], ["tok-var", ": "], ["tok-fn", "Developer"], ["tok-var", " = {"]],
@@ -125,7 +124,6 @@ function TechMarquee() {
   );
 }
 
-/* ---- Variant A: split + code window ---- */
 function HeroA({ t }: { t: Translation }) {
   return (
     <section className="hero hero-a" id="top">
@@ -155,111 +153,6 @@ function HeroA({ t }: { t: Translation }) {
   );
 }
 
-/* ---- Variant B: centered bold typographic ---- */
-function HeroB({ t }: { t: Translation }) {
-  return (
-    <section className="hero hero-b" id="top">
-      <div className="wrap">
-        <div className="hero-grid">
-          <HeroStatus t={t} />
-          <h1 className="reveal in">
-            {t.hero.titleLead}
-            <br />
-            <span className="grad-text">{t.hero.titleHi}</span>
-            <br />
-            {t.hero.titleEnd}
-          </h1>
-          <p className="hero-sub">{t.hero.sub}</p>
-          <HeroCTA t={t} />
-          <TechMarquee />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---- Variant C: device mockups ---- */
-function DeviceMockups() {
-  return (
-    <div className="devices">
-      <div className="device-browser">
-        <div className="bar">
-          <span className="d"></span>
-          <span className="d"></span>
-          <span className="d"></span>
-          <span className="url"></span>
-        </div>
-        <div className="screen">
-          <div className="mini-row">
-            <span className="mini-chip" style={{ width: 64 }}></span>
-            <span className="mini-bar" style={{ width: 90, marginLeft: "auto" }}></span>
-          </div>
-          <div className="mini-bar mini-accent" style={{ width: "62%", height: 14, marginBottom: 14 }}></div>
-          <div className="pv-grid" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
-            <div className="mini-card">
-              <div className="mini-bar" style={{ width: "70%" }}></div>
-              <div className="mini-bar" style={{ width: "45%", marginTop: 7 }}></div>
-            </div>
-            <div className="mini-card">
-              <div className="mini-bar mini-accent" style={{ width: "60%" }}></div>
-              <div className="mini-bar" style={{ width: "50%", marginTop: 7 }}></div>
-            </div>
-            <div className="mini-card">
-              <div className="mini-bar" style={{ width: "55%" }}></div>
-              <div className="mini-bar" style={{ width: "65%", marginTop: 7 }}></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="device-phone">
-        <span className="notch"></span>
-        <div className="screen">
-          <div className="mini-row" style={{ marginTop: 6 }}>
-            <span className="mini-bar" style={{ width: 50 }}></span>
-            <span className="mini-chip" style={{ width: 22, marginLeft: "auto" }}></span>
-          </div>
-          <div className="mini-card" style={{ marginTop: 10 }}>
-            <div className="mini-bar mini-accent" style={{ width: "70%" }}></div>
-            <div className="mini-bar" style={{ width: "90%", marginTop: 8 }}></div>
-            <div className="mini-bar" style={{ width: "60%", marginTop: 6 }}></div>
-          </div>
-          <div className="mini-card" style={{ marginTop: 10 }}>
-            <div className="mini-bar" style={{ width: "55%" }}></div>
-            <div className="mini-bar" style={{ width: "80%", marginTop: 8 }}></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function HeroC({ t }: { t: Translation }) {
-  return (
-    <section className="hero hero-c" id="top">
-      <div className="wrap">
-        <div className="hero-grid">
-          <div className="hero-copy">
-            <HeroStatus t={t} />
-            <h1 className="reveal in" style={{ margin: "22px 0 0" }}>
-              {t.hero.titleLead} <span className="grad-text">{t.hero.titleHi}</span> {t.hero.titleEnd}
-            </h1>
-            <p className="hero-sub" style={{ margin: "22px 0 30px" }}>
-              {t.hero.sub}
-            </p>
-            <HeroCTA t={t} />
-            <div style={{ marginTop: 44 }}>
-              <HeroStats t={t} />
-            </div>
-          </div>
-          <DeviceMockups />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default function Hero({ variant, t }: HeroProps) {
-  if (variant === "B") return <HeroB t={t} />;
-  if (variant === "C") return <HeroC t={t} />;
+export default function Hero({ t }: HeroProps) {
   return <HeroA t={t} />;
 }
