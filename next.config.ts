@@ -34,6 +34,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Build standalone usado pelo Dockerfile da VPS (copia .next/standalone).
+  output: "standalone",
   async headers() {
     return [
       {
