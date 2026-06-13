@@ -14,6 +14,8 @@ interface FormState {
   email: string;
   subject: string;
   message: string;
+  // Honeypot anti-bot: deve permanecer sempre vazio para humanos.
+  website: string;
 }
 
 interface FormErrors {
@@ -30,20 +32,26 @@ export default function Contact({ t, lang }: ContactProps) {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [form, setForm] = useState<FormState>({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState<FormState>({ name: "", email: "", subject: "", message: "", website: "" });
   const [errs, setErrs] = useState<FormErrors>({});
 
   const copy = () => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      navigator.clipboard
+        .writeText(email)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1800);
+        })
+        .catch(() => {
+          /* clipboard indisponível (permissão/contexto não-seguro) — ignora */
+        });
     }
   };
 
   const handleChange = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((p) => ({ ...p, [k]: e.target.value }));
-    if (k !== "subject" && errs[k]) {
+    if (k !== "subject" && k !== "website" && errs[k]) {
       setErrs((p) => ({ ...p, [k]: null }));
     }
   };
@@ -90,13 +98,12 @@ export default function Contact({ t, lang }: ContactProps) {
       }
 
       setSent(true);
-    } catch (err: any) {
-      setSubmitError(
-        err.message ||
-          (lang === "pt"
-            ? "Erro de conexão. Por favor, verifique sua rede."
-            : "Connection error. Please check your network.")
-      );
+    } catch (err: unknown) {
+      const fallback =
+        lang === "pt"
+          ? "Erro de conexão. Por favor, verifique sua rede."
+          : "Connection error. Please check your network.";
+      setSubmitError(err instanceof Error && err.message ? err.message : fallback);
     } finally {
       setLoading(false);
     }
@@ -104,7 +111,7 @@ export default function Contact({ t, lang }: ContactProps) {
 
   const reset = () => {
     setSent(false);
-    setForm({ name: "", email: "", subject: "", message: "" });
+    setForm({ name: "", email: "", subject: "", message: "", website: "" });
     setErrs({});
     setSubmitError(null);
   };
@@ -132,6 +139,17 @@ export default function Contact({ t, lang }: ContactProps) {
             </div>
           ) : (
             <form className="contact-form" onSubmit={handleSubmit} noValidate>
+              {/* Honeypot anti-bot: invisível e fora da navegação por teclado. */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={form.website}
+                onChange={handleChange("website")}
+                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+              />
               <div className="cf-row">
                 <div className="cf-field">
                   <label htmlFor="cf-name">

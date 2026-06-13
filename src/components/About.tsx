@@ -8,6 +8,16 @@ interface AboutProps {
   t: Translation;
 }
 
+// Renderiza um texto que pode conter apenas o marcador <b>…</b>, de forma segura:
+// cada trecho vira um nó de texto (auto-escapado pelo React), e só os marcadores
+// reconhecidos viram <b>. Nenhum HTML arbitrário é interpretado.
+function renderWithBold(text: string): React.ReactNode {
+  const parts = text.split(/<b>(.*?)<\/b>/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? <b key={i}>{part}</b> : <React.Fragment key={i}>{part}</React.Fragment>
+  );
+}
+
 export default function About({ t }: AboutProps) {
   return (
     <section className="section-pad" id="about">
@@ -18,7 +28,7 @@ export default function About({ t }: AboutProps) {
         </div>
         <div className="about-grid">
           <div className="reveal">
-            <p className="about-lead" dangerouslySetInnerHTML={{ __html: t.about.lead }}></p>
+            <p className="about-lead">{renderWithBold(t.about.lead)}</p>
             <div className="about-body">
               <p>{t.about.p1}</p>
               <p>{t.about.p2}</p>
